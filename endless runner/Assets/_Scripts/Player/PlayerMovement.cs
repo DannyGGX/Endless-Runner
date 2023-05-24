@@ -12,8 +12,10 @@ public class PlayerMovement : MonoBehaviour
     private float forwardSpeed;
     private float forwardMovement;
     [SerializeField] private float initialStrafeSpeed;
+    [SerializeField] private float initialAirStrafeSpeed;
     [SerializeField] private float increaseStrafeSpeed;
     private float strafeSpeed;
+    private float airStrafeSpeed;
     private float strafeMovement;
     [Space]
     [SerializeField] private float jumpForce;
@@ -38,24 +40,24 @@ public class PlayerMovement : MonoBehaviour
     {
         forwardSpeed = initialForwardSpeed;
         strafeSpeed = initialStrafeSpeed;
+        airStrafeSpeed = initialAirStrafeSpeed;
         gravity = initialGravity;
         
     }
 
     void Update()
     {
-        //if (BoundaryCheck())
-        {
-            strafeMovement = Input.GetAxis("Horizontal") * strafeSpeed;
-        }
-        //else if (LeftBoundaryCheck())
-        {
-            //strafeMovement = Input.GetAxis("Horizontal") * 
-        }
+        isGrounded = GroundCheck();
+        
         forwardMovement = forwardSpeed;
+
+        if (isGrounded)
+            strafeMovement = Input.GetAxis("Horizontal") * strafeSpeed;
+        else
+            strafeMovement = Input.GetAxis("Horizontal") * airStrafeSpeed;
+
         verticalMovement += gravity * Time.deltaTime;
 
-        isGrounded = GroundCheck();
         if(isGrounded && verticalMovement < 0)
         {
             verticalMovement = 0;
@@ -100,6 +102,7 @@ public class PlayerMovement : MonoBehaviour
     private void IncreaseSpeed()
     {
         strafeSpeed += increaseStrafeSpeed;
+        airStrafeSpeed += increaseStrafeSpeed;
         forwardSpeed += increaseForwardSpeed;
         gravity += increaseGravityAmount;
     }
