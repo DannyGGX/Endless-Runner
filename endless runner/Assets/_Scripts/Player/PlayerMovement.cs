@@ -50,7 +50,7 @@ public class PlayerMovement : MonoBehaviour
         isGrounded = GroundCheck();
         if(isGrounded && verticalMovement < 0)
         {
-            verticalMovement = 1;
+            verticalMovement = 0;
         }
 
         if(Input.GetButtonDown("Jump") && isGrounded)
@@ -66,10 +66,12 @@ public class PlayerMovement : MonoBehaviour
     {
         if (Physics.Raycast(groundCheckPositionForward.position, Vector3.down, groundCheckDistance, whatIsGround))
         {
+            Debug.DrawLine(groundCheckPositionForward.position, new Vector3(0, -groundCheckDistance), Color.yellow, 2);
             return true;
         }
         if (Physics.Raycast(groundCheckPositionBackward.position, Vector3.down, groundCheckDistance, whatIsGround))
         {
+            Debug.DrawLine(groundCheckPositionBackward.position, new Vector3(0, -groundCheckDistance), Color.red, 2);
             return true;
         }
         return false;
