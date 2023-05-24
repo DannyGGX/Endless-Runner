@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private CharacterController characterController;
+    //[SerializeField] private Animator animator;
     [Space]
     [SerializeField] private float initialForwardSpeed;
     [SerializeField] private float increaseForwardSpeed;
@@ -22,6 +23,7 @@ public class PlayerMovement : MonoBehaviour
     private float gravity;
     private float verticalMovement; // velocity
     private Vector3 move;
+    private Vector3 playerPosition;
     private bool isGrounded = false;
     [Space]
     [SerializeField] private Transform groundCheckPositionForward;
@@ -31,7 +33,6 @@ public class PlayerMovement : MonoBehaviour
     [Space]
     [SerializeField] private Transform leftBoundary;
     [SerializeField] private Transform rightBoundary;
-
 
     private void Awake()
     {
@@ -43,7 +44,14 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        strafeMovement = Input.GetAxis("Horizontal") * strafeSpeed;
+        //if (BoundaryCheck())
+        {
+            strafeMovement = Input.GetAxis("Horizontal") * strafeSpeed;
+        }
+        //else if (LeftBoundaryCheck())
+        {
+            //strafeMovement = Input.GetAxis("Horizontal") * 
+        }
         forwardMovement = forwardSpeed;
         verticalMovement += gravity * Time.deltaTime;
 
@@ -59,22 +67,34 @@ public class PlayerMovement : MonoBehaviour
         }
 
         move = new Vector3(strafeMovement, verticalMovement, forwardMovement);
+        //move.x = Mathf.Clamp(move.x, -3, 3);
         characterController.Move(move * Time.deltaTime);
+        //transform.position = Mathf.Clamp()
     }
 
     private bool GroundCheck()
     {
         if (Physics.Raycast(groundCheckPositionForward.position, Vector3.down, groundCheckDistance, whatIsGround))
         {
-            Debug.DrawLine(groundCheckPositionForward.position, new Vector3(0, -groundCheckDistance), Color.yellow, 2);
+            //Debug.DrawLine(groundCheckPositionForward.position, new Vector3(0, -groundCheckDistance), Color.yellow, 2);
             return true;
         }
         if (Physics.Raycast(groundCheckPositionBackward.position, Vector3.down, groundCheckDistance, whatIsGround))
         {
-            Debug.DrawLine(groundCheckPositionBackward.position, new Vector3(0, -groundCheckDistance), Color.red, 2);
+            //Debug.DrawLine(groundCheckPositionBackward.position, new Vector3(0, -groundCheckDistance), Color.red, 2);
             return true;
         }
         return false;
+    }
+
+    private bool BoundaryCheck()
+    {
+        return transform.position.x <= rightBoundary.position.x && transform.position.x >= leftBoundary.position.x;
+        
+    }
+    private bool LeftBoundaryCheck()
+    {
+        return transform.position.x == rightBoundary.position.x;
     }
 
     private void IncreaseSpeed()
