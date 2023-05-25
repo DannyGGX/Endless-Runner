@@ -11,6 +11,12 @@ public class GameManager : MonoBehaviour
     public bool DoublePointsOn { get; set; } = false;
     public bool isPaused { get; set; } = false;
     public bool controlsEnabled { get; private set; } = true;
+
+    [SerializeField] private int level1Index = 0;
+    [SerializeField] private int level2Index = 1;
+    private int currentScene = 0;
+
+
     void Awake()
     {
         if (Instance == null)
@@ -27,17 +33,45 @@ public class GameManager : MonoBehaviour
 
     public void PlayerDie()
     {
-
+        StartGame();
     }
 
     public void RestartGame()
     {
 
     }
+    public void StartGame()
+    {
+        Score = 0;
+        StartLevel1();
+    }
 
     public void SwitchLevel()
     {
+        if (currentScene == level1Index)
+        {
+            StartLevel2();
 
+        }
+        else if (currentScene == level2Index)
+        {
+            StartLevel1();
+        }
+    }
+
+    private void StartLevel()
+    {
+        SceneManager.LoadScene(currentScene);
+    }
+    private void StartLevel1()
+    {
+        currentScene = level1Index;
+        StartLevel();
+    }
+    private void StartLevel2()
+    {
+        currentScene = level2Index;
+        StartLevel();
     }
 
     public void PauseToggle()

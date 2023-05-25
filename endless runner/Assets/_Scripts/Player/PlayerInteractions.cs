@@ -13,7 +13,11 @@ public class PlayerInteractions : MonoBehaviour
 
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.P))
+        {
+            GameManager.Instance.PauseToggle();
+        }
+
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)

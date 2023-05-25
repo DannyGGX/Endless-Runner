@@ -9,7 +9,7 @@ public class Boundaries : MonoBehaviour
 
     private void Awake()
     {
-        position.x = player.position.x;
+        transform.position = player.position;
     }
 
     void Update()

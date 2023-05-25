@@ -47,31 +47,38 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        isGrounded = GroundCheck();
+        //if (GameManager.Instance.controlsEnabled)
+        {
+            isGrounded = GroundCheck();
         
-        forwardMovement = forwardSpeed;
+            forwardMovement = forwardSpeed;
+        
+            if (isGrounded)
+                strafeMovement = Input.GetAxis("Horizontal") * strafeSpeed;
+            else
+                strafeMovement = Input.GetAxis("Horizontal") * airStrafeSpeed;
 
-        if (isGrounded)
-            strafeMovement = Input.GetAxis("Horizontal") * strafeSpeed;
-        else
-            strafeMovement = Input.GetAxis("Horizontal") * airStrafeSpeed;
+            verticalMovement += gravity * Time.deltaTime;
 
-        verticalMovement += gravity * Time.deltaTime;
+            if(isGrounded && verticalMovement < 0)
+            {
+                verticalMovement = 0;
+            }
 
-        if(isGrounded && verticalMovement < 0)
-        {
-            verticalMovement = 0;
+            if(Input.GetButtonDown("Jump") && isGrounded)
+            {
+                verticalMovement = jumpForce;
+            }
+
+            move = new Vector3(strafeMovement, verticalMovement, forwardMovement);
+            characterController.Move(move * Time.deltaTime);
+            //transform.position = Mathf.Clamp()
         }
+    }
 
-        if(Input.GetButtonDown("Jump") && isGrounded)
-        {
-            verticalMovement = jumpForce;
-        }
-
-        move = new Vector3(strafeMovement, verticalMovement, forwardMovement);
-        //move.x = Mathf.Clamp(move.x, -3, 3);
-        characterController.Move(move * Time.deltaTime);
-        //transform.position = Mathf.Clamp()
+    private void FixedUpdate()
+    {
+        //SetAnimatorState();
     }
 
     private bool GroundCheck()
@@ -89,6 +96,33 @@ public class PlayerMovement : MonoBehaviour
         return false;
     }
 
+
+    private void IncreaseSpeed()
+    {
+        strafeSpeed += increaseStrafeSpeed;
+        airStrafeSpeed += increaseStrafeSpeed;
+        forwardSpeed += increaseForwardSpeed;
+        gravity += increaseGravityAmount;
+    }
+
+    private void SetAnimatorState()
+    {
+        if(isGrounded)
+        {
+
+        }
+        else
+        {
+            if(verticalMovement > 0)
+            {
+                
+            }
+            else
+            {
+
+            }
+        }
+    }
     private bool BoundaryCheck()
     {
         return transform.position.x <= rightBoundary.position.x && transform.position.x >= leftBoundary.position.x;
@@ -97,13 +131,5 @@ public class PlayerMovement : MonoBehaviour
     private bool LeftBoundaryCheck()
     {
         return transform.position.x == rightBoundary.position.x;
-    }
-
-    private void IncreaseSpeed()
-    {
-        strafeSpeed += increaseStrafeSpeed;
-        airStrafeSpeed += increaseStrafeSpeed;
-        forwardSpeed += increaseForwardSpeed;
-        gravity += increaseGravityAmount;
     }
 }
