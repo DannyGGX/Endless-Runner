@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
     public int Score { get; set; }
-
+    public bool DoublePointsOn { get; set; } = false;
     public bool isPaused { get; set; } = false;
     public bool controlsEnabled { get; private set; } = true;
     void Awake()
@@ -15,6 +16,7 @@ public class GameManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -28,6 +30,15 @@ public class GameManager : MonoBehaviour
 
     }
 
+    public void RestartGame()
+    {
+
+    }
+
+    public void SwitchLevel()
+    {
+
+    }
 
     public void PauseToggle()
     {

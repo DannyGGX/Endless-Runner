@@ -5,10 +5,11 @@ using UnityEngine;
 public class PlayerInteractions : MonoBehaviour
 {
     [SerializeField] CharacterController characterController;
-    void Start()
-    {
-        
-    }
+
+    [SerializeField] private Transform face;
+    [SerializeField] private Transform lowerBodyPos;
+    [SerializeField] private LayerMask whatIsGround;
+    [SerializeField] private float rayCastLength = 0.15f;
 
     void Update()
     {
@@ -17,16 +18,19 @@ public class PlayerInteractions : MonoBehaviour
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        if(hit.collider.gameObject.CompareTag("Deadly"))
+        if(hit.collider.gameObject.CompareTag("Deadly") || CheckForFacePlant())
         {
-            // game manager restart
-        }
-        else
-        {
-            // wait to see if collider still is hitting to die
+            //GameManager.Instance.PlayerDie();
         }
     }
 
-
+    private bool CheckForFacePlant()
+    {
+        if (Physics.Raycast(lowerBodyPos.position, Vector3.down, rayCastLength, whatIsGround))
+            return true;
+        if (Physics.Raycast(face.position, Vector3.down, rayCastLength, whatIsGround))
+            return true;
+        return false;
+    }
 
 }
