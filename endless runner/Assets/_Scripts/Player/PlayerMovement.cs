@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private CharacterController characterController;
-    //[SerializeField] private Animator animator;
+    [SerializeField] private Animator animator;
     [Space]
     [SerializeField] private float initialForwardSpeed;
     [SerializeField] private float increaseForwardSpeed;
@@ -68,6 +68,7 @@ public class PlayerMovement : MonoBehaviour
             if(Input.GetButtonDown("Jump") && isGrounded)
             {
                 verticalMovement = jumpForce;
+                animator.SetTrigger("Jump");
             }
 
             move = new Vector3(strafeMovement, verticalMovement, forwardMovement);
