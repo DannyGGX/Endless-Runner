@@ -47,34 +47,34 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        //if (GameManager.Instance.controlsEnabled)
+        if (GameManager.Instance.controlsEnabled == false)
+            return;
+
+        isGrounded = GroundCheck();
+        
+        forwardMovement = forwardSpeed;
+        
+        if (isGrounded)
+            strafeMovement = Input.GetAxis("Horizontal") * strafeSpeed;
+        else
+            strafeMovement = Input.GetAxis("Horizontal") * airStrafeSpeed;
+
+        verticalMovement += gravity * Time.deltaTime;
+
+        if(isGrounded && verticalMovement < 0)
         {
-            isGrounded = GroundCheck();
-        
-            forwardMovement = forwardSpeed;
-        
-            if (isGrounded)
-                strafeMovement = Input.GetAxis("Horizontal") * strafeSpeed;
-            else
-                strafeMovement = Input.GetAxis("Horizontal") * airStrafeSpeed;
-
-            verticalMovement += gravity * Time.deltaTime;
-
-            if(isGrounded && verticalMovement < 0)
-            {
-                verticalMovement = 0;
-            }
-
-            if(Input.GetButtonDown("Jump") && isGrounded)
-            {
-                verticalMovement = jumpForce;
-                animator.SetTrigger("Jump");
-            }
-
-            move = new Vector3(strafeMovement, verticalMovement, forwardMovement);
-            characterController.Move(move * Time.deltaTime);
-            //transform.position = Mathf.Clamp()
+            verticalMovement = 0;
         }
+
+        if(Input.GetButtonDown("Jump") && isGrounded)
+        {
+            verticalMovement = jumpForce;
+            animator.SetTrigger("Jump");
+        }
+
+        move = new Vector3(strafeMovement, verticalMovement, forwardMovement);
+        characterController.Move(move * Time.deltaTime);
+        //transform.position = Mathf.Clamp()
     }
 
     private void FixedUpdate()

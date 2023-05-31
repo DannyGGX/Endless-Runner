@@ -28,19 +28,22 @@ public class GameManager : MonoBehaviour
         {
             Destroy(this);
         }
-
+        controlsEnabled = true;
     }
 
     public void PlayerDie()
     {
         controlsEnabled = false; // stops player movement
         
+    }
+    public void ShowDeathScreen()
+    {
         StartGame();
     }
 
     public void RestartGame()
     {
-
+        StartGame();
     }
     public void StartGame()
     {
@@ -63,6 +66,7 @@ public class GameManager : MonoBehaviour
 
     private void StartLevel()
     {
+        controlsEnabled = true;
         SceneManager.LoadScene(currentScene);
     }
     private void StartLevel1()

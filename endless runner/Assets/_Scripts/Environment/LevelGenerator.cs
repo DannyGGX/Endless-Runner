@@ -17,7 +17,6 @@ public class LevelGenerator : MonoBehaviour
     public float zSpawn = 0; // Z position at which to spawn the next ground tile
     public float groundLength = 30; // Length of each ground tile
     [SerializeField] private const int STARTING_lEVEL_PART_AMOUNT = 5;
-    public int startingLevelPartAmount = STARTING_lEVEL_PART_AMOUNT; // Number of initial ground tiles to spawn
 
     void Awake()
     {
@@ -25,7 +24,7 @@ public class LevelGenerator : MonoBehaviour
         SpawnLevelPart(startLevelPartIndex);
         
         // Spawn initial ground tiles
-        for (int i = 1; i < startingLevelPartAmount; i++)
+        for (int i = 1; i < STARTING_lEVEL_PART_AMOUNT; i++)
         {
             SpawnLevelPart(PickRandomLevelPart()); // Spawn a random ground tile from the groundPrefabs array
         }
