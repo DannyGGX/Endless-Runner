@@ -4,54 +4,78 @@ using UnityEngine;
 
 public class LevelGenerator : MonoBehaviour
 {
-    [SerializeField] private Transform playerPosition;
-    private const float SECTION_SPAWN_DISTANCE = 200;
+    [SerializeField] private Transform playerTransform; // Reference to the player's transform
+    [SerializeField] private const float SECTION_SPAWN_DISTANCE = 200;
 
 
-    private Vector3 lastSectionEndPos;
+    private Vector3 lastPartEndPos;
+    [SerializeField] private Vector3 startLevelPartPos = Vector3.zero;
 
-    public GameObject[] groundPrefabs; // Array of ground prefabs to spawn
+    [SerializeField] private GameObject[] LevelParts; // All level parts to choose from
+    [SerializeField] private int startLevelPartIndex; // Index of level part in the list
+    private List<GameObject> ActiveLevelParts = new List<GameObject>(); // List of currently active level parts
     public float zSpawn = 0; // Z position at which to spawn the next ground tile
     public float groundLength = 30; // Length of each ground tile
-    public int numberOfGroundTiles = 5; // Number of initial ground tiles to spawn
-    private List<GameObject> activeGroundTiles = new List<GameObject>(); // List of currently active ground tiles
-    public Transform playerTransform; // Reference to the player's transform
+    [SerializeField] private const int STARTING_lEVEL_PART_AMOUNT = 5;
+    public int startingLevelPartAmount = STARTING_lEVEL_PART_AMOUNT; // Number of initial ground tiles to spawn
 
-    // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
+        //lastPartEndPos = 
+        SpawnLevelPart(startLevelPartIndex);
+        
         // Spawn initial ground tiles
-        for (int i = 0; i < numberOfGroundTiles; i++)
+        for (int i = 1; i < startingLevelPartAmount; i++)
         {
-            if (i == 0)
-                SpawnTile(0); // Spawn the first ground tile from the groundPrefabs array
-            else
-                SpawnTile(Random.Range(0, groundPrefabs.Length)); // Spawn a random ground tile from the groundPrefabs array
+            SpawnLevelPart(PickRandomLevelPart()); // Spawn a random ground tile from the groundPrefabs array
         }
     }
-    // Update is called once per frame
+
     void Update()
     {
-        // Check if the player has moved ahead of the currently spawned ground tiles
-        if (playerTransform.position.z - 35 > zSpawn - (numberOfGroundTiles * groundLength))
+        
+        if (PlayerDistanceCheck())
         {
-            SpawnTile(Random.Range(0, groundPrefabs.Length)); // Spawn a new random ground tile
-            DeleteGroundTile(); // Delete the oldest ground tile
+            SpawnLevelPart(PickRandomLevelPart()); // Spawn a new random ground tile
+            DeleteOldestLevelPart();
         }
     }
 
-    public void SpawnTile(int groundIndex)
+    private void SpawnLevelPart(int LevelPartIndex)
     {
         // Instantiate a ground tile at the specified zSpawn position
-        GameObject go = Instantiate(groundPrefabs[groundIndex], transform.forward * zSpawn, transform.rotation);
-        activeGroundTiles.Add(go); // Add the spawned ground tile to the list of active ground tiles
+        GameObject levelPart = LevelParts[LevelPartIndex];
+
+        levelPart = Instantiate(levelPart, transform.forward * zSpawn, transform.rotation);
+        ActiveLevelParts.Add(levelPart); // Add the spawned ground tile to the list of active ground tiles
         zSpawn += groundLength; // Update the zSpawn position for the next ground tile
     }
 
-    private void DeleteGroundTile()
+    private Vector3 GetEndPos(GameObject levelPart)
+    {
+        return levelPart.GetComponentInChildren<Transform>().position;
+    }
+
+    private Vector3 GetSpawnPosition(GameObject levelPart)
+    {
+
+        throw new System.Exception();
+    }
+
+    private void DeleteOldestLevelPart()
     {
         // Destroy the oldest ground tile in the list and remove it from the list
-        Destroy(activeGroundTiles[0]);
-        activeGroundTiles.RemoveAt(0);
+        Destroy(ActiveLevelParts[0]);
+        ActiveLevelParts.RemoveAt(0);
+    }
+
+    private bool PlayerDistanceCheck()
+    {
+        return Vector3.Distance(playerTransform.position, lastPartEndPos) < SECTION_SPAWN_DISTANCE;
+    }
+
+    private int PickRandomLevelPart()
+    {
+        return Random.Range(0, LevelParts.Length);
     }
 }
