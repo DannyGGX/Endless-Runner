@@ -254,6 +254,7 @@ MonoBehaviour:
   - {fileID: 1143668987508995177, guid: edadd505bef37fa47b863d73c7e4ed6c, type: 3}
   - {fileID: 2026618212226949100, guid: 6fb3dc0fdc3f2d842afa992df0354fec, type: 3}
   - {fileID: 6314644911074279795, guid: aa35b79969903b4419d55bb04e9f1f05, type: 3}
+  - {fileID: 8598761764360775450, guid: 4fbdceba516885a45b420d9a548c4032, type: 3}
   activeLevelParts: []
 --- !u!1 &576280253 stripped
 GameObject:
@@ -663,6 +664,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   level1Index: 0
   level2Index: 1
+  <bossSpawnTime>k__BackingField: 30
 --- !u!1 &1507437256
 GameObject:
   m_ObjectHideFlags: 0
@@ -1239,7 +1241,7 @@ MonoBehaviour:
   whatIsGround:
     serializedVersion: 2
     m_Bits: 64
-  groundCheckDistance: 0.24
+  groundCheckDistance: 0.3
   leftBoundary: {fileID: 275142634}
   rightBoundary: {fileID: 1889336243}
 --- !u!114 &1751432069

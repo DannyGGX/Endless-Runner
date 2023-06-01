@@ -167,7 +167,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 55
+  controlID: 2515
 --- !u!114 &5
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -453,9 +453,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 2.8624907, y: 3.3415198, z: 2.9753118}
+    m_Target: {x: -1.6468086, y: 0.45508528, z: 36.839893}
     speed: 2
-    m_Value: {x: 2.8624907, y: 3.3415198, z: 2.9753118}
+    m_Value: {x: -1.6468086, y: 0.45508528, z: 36.839893}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -502,13 +502,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: -0.14904082, y: 0.61503386, z: -0.11967216, w: -0.7650645}
+    m_Target: {x: -0.21379879, y: 0.50814164, z: -0.13171372, w: -0.8239432}
     speed: 2
-    m_Value: {x: -0.1490315, y: 0.6149954, z: -0.119664684, w: -0.7650167}
+    m_Value: {x: -0.21378289, y: 0.50810385, z: -0.13170393, w: -0.8238819}
   m_Size:
-    m_Target: 6.0831895
+    m_Target: 5.6343365
     speed: 2
-    m_Value: 6.0831895
+    m_Value: 5.6343365
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -593,7 +593,7 @@ MonoBehaviour:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: 36fbffff984a00009c4a0000
+      m_ExpandedIDs: 72bbfbff36fbffff984a00009c4a0000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -780,21 +780,21 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets
+    - Assets/_Scripts/Managers
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 56
   m_LastFolders:
-  - Assets
+  - Assets/_Scripts/Managers
   m_LastFoldersGridSize: 56
   m_LastProjectPath: C:\Users\Main\Documents\GitHub\Endless-Runner\endless runner
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 31}
-    m_SelectedIDs: b24f0000
-    m_LastClickedID: 20402
+    scrollPos: {x: 0, y: 111}
+    m_SelectedIDs: d84f0000
+    m_LastClickedID: 20440
     m_ExpandedIDs: 00000000b24f0000b44f0000b64f0000b84f0000ba4f0000bc4f0000be4f0000c04f0000c24f0000c44f0000c64f0000c84f0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0

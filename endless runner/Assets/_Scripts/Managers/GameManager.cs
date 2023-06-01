@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
-
     public int Score { get; set; }
     public bool DoublePointsOn { get; set; } = false;
     private bool isPaused { get; set; } = false;
@@ -15,7 +14,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int level1Index = 0;
     [SerializeField] private int level2Index = 1;
     private int currentScene = 0;
-
+    [field: Space]
+    public float gameTime { get; private set; } = 0f;
+    [field: SerializeField] public float bossSpawnTime { get; private set; } = 30f;
 
     void Awake()
     {
@@ -28,6 +29,15 @@ public class GameManager : MonoBehaviour
             Destroy(this);
         }
         controlsEnabled = true;
+    }
+
+    private void FixedUpdate()
+    {
+        gameTime += Time.fixedDeltaTime;
+        if (gameTime > bossSpawnTime)
+        {
+
+        }
     }
 
     public void PlayerDie()
@@ -46,6 +56,7 @@ public class GameManager : MonoBehaviour
     }
     public void StartGame()
     {
+        gameTime = 0f;
         Score = 0;
         StartLevel1();
     }

@@ -73,11 +73,10 @@ public class PlayerMovement : MonoBehaviour
         }
         else if (verticalMovement < lethalGravityValue)
         {
-            // die event to player interactions
-            onPlayerFallTooFast?.Invoke();
+            onPlayerFallTooFast?.Invoke(); // die event to PlayerInteractions
         }
 
-        if(Input.GetButtonDown("Jump") && isGrounded)
+        if(Input.GetButton("Jump") && isGrounded)
         {
             verticalMovement = jumpForce;
             animator.SetTrigger("Jump");

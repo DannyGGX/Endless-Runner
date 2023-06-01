@@ -5,8 +5,6 @@ using UnityEngine;
 public class PlayerInteractions : MonoBehaviour
 {
     [SerializeField] Transform playerTransform;
-    private float verticalVelocity;
-    private float previousVerticalVelocity;
     [SerializeField] Animator animator;
     [Space]
     [SerializeField] private Transform face;
@@ -31,11 +29,6 @@ public class PlayerInteractions : MonoBehaviour
             GameManager.Instance.PauseToggle();
         }
 
-    }
-
-    private float CalcVerticalVelocity()
-    {
-        return 0;
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
