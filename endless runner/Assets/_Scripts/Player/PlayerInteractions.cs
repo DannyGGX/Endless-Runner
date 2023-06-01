@@ -4,13 +4,25 @@ using UnityEngine;
 
 public class PlayerInteractions : MonoBehaviour
 {
-    [SerializeField] CharacterController characterController;
+    [SerializeField] Transform playerTransform;
+    private float verticalVelocity;
+    private float previousVerticalVelocity;
     [SerializeField] Animator animator;
     [Space]
     [SerializeField] private Transform face;
     [SerializeField] private Transform lowerBodyPos;
     [SerializeField] private LayerMask whatIsGround;
     [SerializeField] private float rayCastLength = 0.15f;
+
+    private void OnEnable()
+    {
+        PlayerMovement.onPlayerFallTooFast += KillPlayer;
+    }
+
+    private void OnDisable()
+    {
+        PlayerMovement.onPlayerFallTooFast -= KillPlayer;
+    }
 
     void Update()
     {
@@ -21,16 +33,24 @@ public class PlayerInteractions : MonoBehaviour
 
     }
 
+    private float CalcVerticalVelocity()
+    {
+        return 0;
+    }
+
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
         if(hit.collider.gameObject.CompareTag("Deadly") || CheckForFacePlant())
         {
-            Debug.Log("Player die");
-            GameManager.Instance.PlayerDie();
-            animator.SetTrigger("Die");
+            KillPlayer();
         }
     }
 
+    private void KillPlayer()
+    {
+        GameManager.Instance.PlayerDie();
+        animator.SetTrigger("Die");
+    }
 
     private bool CheckForFacePlant()
     {

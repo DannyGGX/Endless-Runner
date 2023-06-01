@@ -23,9 +23,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float initialGravity;
     [SerializeField] private float increaseGravityAmount;
     private float gravity;
+    [SerializeField] private float lethalGravityValue = -25;
     private float verticalMovement; // velocity
     private Vector3 move;
-    private Vector3 playerPosition;
+    //private Vector3 playerPosition;
     private bool isGrounded = false;
     [Space]
     [SerializeField] private Transform groundCheckPositionForward;
@@ -36,6 +37,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Transform leftBoundary;
     [SerializeField] private Transform rightBoundary;
 
+    public delegate void OnPlayerFallTooFast();
+    public static OnPlayerFallTooFast onPlayerFallTooFast;
+
     private void Awake()
     {
         forwardSpeed = initialForwardSpeed;
@@ -44,6 +48,8 @@ public class PlayerMovement : MonoBehaviour
         gravity = initialGravity;
         
     }
+
+
 
     void Update()
     {
@@ -65,6 +71,11 @@ public class PlayerMovement : MonoBehaviour
         {
             verticalMovement = 0;
         }
+        else if (verticalMovement < lethalGravityValue)
+        {
+            // die event to player interactions
+            onPlayerFallTooFast?.Invoke();
+        }
 
         if(Input.GetButtonDown("Jump") && isGrounded)
         {
@@ -77,10 +88,10 @@ public class PlayerMovement : MonoBehaviour
         //transform.position = Mathf.Clamp()
     }
 
-    private void FixedUpdate()
-    {
-        //SetAnimatorState();
-    }
+    //private void FixedUpdate()
+    //{
+    //    SetAnimatorState();
+    //}
 
     private bool GroundCheck()
     {

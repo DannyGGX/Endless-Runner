@@ -13,13 +13,15 @@ public class LevelGenerator1 : MonoBehaviour {
     [SerializeField] private List<GameObject> availableLevelParts;
     [SerializeField] private List<GameObject> activeLevelParts;
 
+    private const string END_POSITION_OBJECT_NAME = "EndPos";
+
     private Vector3 lastEndPosition;
 
     private void Awake()
     {
         SpawnLevelPart(START_LEVEL_PART_INDEX);
 
-        for (int i = 1; i < STARTING_LEVEL_PART_AMOUNT; i++)
+        for (int i = activeLevelParts.Count; i < STARTING_LEVEL_PART_AMOUNT; i++)
         {
             SpawnLevelPart(GetRandomLevelPartIndex());
         }
@@ -27,29 +29,24 @@ public class LevelGenerator1 : MonoBehaviour {
 
     private void Update()
     {
-        if (CheckPlayerDistance())
+        if (CheckPlayerDistanceToEnd())
         {
             SpawnLevelPart(GetRandomLevelPartIndex());
             DeleteOldestLevelPart();
         }
     }
 
-    private bool CheckPlayerDistance()
+    private bool CheckPlayerDistanceToEnd()
     {
         return Vector3.Distance(playerTransform.position, lastEndPosition) < PLAYER_DISTANCE_SPAWN_LEVEL_PART;
     }
 
-    private void SpawnLevelPart(int levelPartIndex) {
-        GameObject chosenLevelPart = availableLevelParts[levelPartIndex];
-        chosenLevelPart = SpawnLevelPart(chosenLevelPart, lastEndPosition);
-        //chosenLevelPart = Instantiate(chosenLevelPart, lastEndPosition, Quaternion.identity);
-        activeLevelParts.Add(chosenLevelPart);
-        lastEndPosition = chosenLevelPart.transform.Find("EndPos").position;
-    }
-
-    private GameObject SpawnLevelPart(GameObject levelPart, Vector3 spawnPosition) 
+    private void SpawnLevelPart(int levelPartIndex)
     {
-        return Instantiate(levelPart, spawnPosition, Quaternion.identity);
+        GameObject chosenLevelPart = availableLevelParts[levelPartIndex];
+        chosenLevelPart = Instantiate(chosenLevelPart, lastEndPosition, Quaternion.identity);
+        activeLevelParts.Add(chosenLevelPart);
+        lastEndPosition = chosenLevelPart.transform.Find(END_POSITION_OBJECT_NAME).position;
     }
 
     private int GetRandomLevelPartIndex()

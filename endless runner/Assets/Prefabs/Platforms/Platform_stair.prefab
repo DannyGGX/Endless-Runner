@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4581989639857701400}
   - component: {fileID: 1761619959213848274}
   - component: {fileID: 3602186095478281900}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Platform_stair
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26,7 +26,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 248388974454920967}
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -17.105007, y: -0.21561317, z: -10.929152}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

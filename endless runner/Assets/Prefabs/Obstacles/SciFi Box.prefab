@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7788279417354681913}
   - component: {fileID: 7797600767229882853}
   - component: {fileID: 7821249293068972593}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SciFi Box
   m_TagString: Untagged
   m_Icon: {fileID: 0}

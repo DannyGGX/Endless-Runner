@@ -252,6 +252,8 @@ MonoBehaviour:
   - {fileID: 1334046443962234296, guid: c07b74cb413450e449174658b8b1599b, type: 3}
   - {fileID: 6257572713855054439, guid: 4409dbe57bfbbec4099119e53966648a, type: 3}
   - {fileID: 1143668987508995177, guid: edadd505bef37fa47b863d73c7e4ed6c, type: 3}
+  - {fileID: 2026618212226949100, guid: 6fb3dc0fdc3f2d842afa992df0354fec, type: 3}
+  - {fileID: 6314644911074279795, guid: aa35b79969903b4419d55bb04e9f1f05, type: 3}
   activeLevelParts: []
 --- !u!1 &576280253 stripped
 GameObject:
@@ -1225,12 +1227,13 @@ MonoBehaviour:
   animator: {fileID: 576280255}
   initialForwardSpeed: 8
   increaseForwardSpeed: 0
-  initialStrafeSpeed: 13
+  initialStrafeSpeed: 11
   initialAirStrafeSpeed: 7
   increaseStrafeSpeed: 0
-  jumpForce: 8
+  jumpForce: 7
   initialGravity: -12
   increaseGravityAmount: -1
+  lethalGravityValue: -25
   groundCheckPositionForward: {fileID: 1948672989}
   groundCheckPositionBackward: {fileID: 1507437257}
   whatIsGround:
@@ -1251,7 +1254,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3415f8e15d211104bb19ec0ec7fdc03f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterController: {fileID: 1751432067}
+  playerTransform: {fileID: 1751432064}
   animator: {fileID: 576280255}
   face: {fileID: 1066055147}
   lowerBodyPos: {fileID: 1842691162}

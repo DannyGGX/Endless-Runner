@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
 
     public int Score { get; set; }
     public bool DoublePointsOn { get; set; } = false;
-    public bool isPaused { get; set; } = false;
+    private bool isPaused { get; set; } = false;
     public bool controlsEnabled { get; private set; } = true;
 
     [SerializeField] private int level1Index = 0;
@@ -22,7 +22,6 @@ public class GameManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            //DontDestroyOnLoad(gameObject);
         }
         else
         {

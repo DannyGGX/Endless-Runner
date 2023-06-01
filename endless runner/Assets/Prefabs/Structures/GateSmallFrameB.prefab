@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1842964253600592339}
   - component: {fileID: 1851232587985049827}
   - component: {fileID: 1801589671871972487}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: GateSmallFrameB
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26,7 +26,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1865199368259701407}
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -37.744, y: -12.41, z: 0.43085}
   m_LocalScale: {x: 1.0238392, y: 1.3819157, z: 1.1061}
   m_ConstrainProportionsScale: 0

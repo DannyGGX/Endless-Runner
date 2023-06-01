@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2462604157003604393}
   - component: {fileID: 6988941976476996054}
   - component: {fileID: 4521286208808358236}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Platform_split
   m_TagString: PlatformZSplit
   m_Icon: {fileID: 0}
