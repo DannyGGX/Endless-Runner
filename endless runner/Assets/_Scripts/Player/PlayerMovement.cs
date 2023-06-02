@@ -114,18 +114,23 @@ public class PlayerMovement : MonoBehaviour
 
     private struct SaveSpeedBeforeSlowDown
     {
-        public float forwardSpeed, strafeSpeed, airStrafeSpeed, gravity;
+        public float forwardSpeed, strafeSpeed, airStrafeSpeed, gravity, lethalGravityValue;
     }
     SaveSpeedBeforeSlowDown savedSpeeds;
-    private void SlowDownSpeed()
+    private void SlowDownSpeed(float speedChange, float gravityChange) // speedChange is nagative, gravityChange is positive
     {
         savedSpeeds = new SaveSpeedBeforeSlowDown();
         savedSpeeds.forwardSpeed = forwardSpeed;
         savedSpeeds.strafeSpeed = strafeSpeed;
         savedSpeeds.airStrafeSpeed = airStrafeSpeed;
         savedSpeeds.gravity = gravity;
+        savedSpeeds.lethalGravityValue = lethalGravityValue;
 
-        // TODO: Change speeds
+        forwardSpeed += speedChange;
+        strafeSpeed += speedChange;
+        airStrafeSpeed += speedChange;
+        gravity += gravityChange;
+        lethalGravityValue += gravityChange;
     }
 
     private void BackToNormalSpeed()
@@ -134,6 +139,7 @@ public class PlayerMovement : MonoBehaviour
         strafeSpeed = savedSpeeds.strafeSpeed;
         airStrafeSpeed = savedSpeeds.airStrafeSpeed;
         gravity = savedSpeeds.gravity;
+        lethalGravityValue = savedSpeeds.lethalGravityValue;
     }
 
     private void IncreaseSpeed()
