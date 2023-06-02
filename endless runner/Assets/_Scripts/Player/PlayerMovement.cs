@@ -8,24 +8,25 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Animator animator;
     [Space]
     [SerializeField] private float initialForwardSpeed;
-    [SerializeField] private float increaseForwardSpeed;
-    private float forwardSpeed;
-    private float forwardMovement;
     [SerializeField] private float initialStrafeSpeed;
     [SerializeField] private float initialAirStrafeSpeed;
+    [SerializeField] private float initialGravity;
+    [Space]
+    [SerializeField] private float increaseForwardSpeed;
     [SerializeField] private float increaseStrafeSpeed;
+    [SerializeField] private float increaseGravityAmount;
+    [SerializeField] private float maxForwardSpeed = 15;
+    private float forwardSpeed;
     private float strafeSpeed;
     private float airStrafeSpeed;
+    private float forwardMovement;
     private float strafeMovement;
+    private float verticalMovement; // velocity
+    private float gravity;
+    private Vector3 move;
     [Space]
     [SerializeField] private float jumpForce;
-
-    [SerializeField] private float initialGravity;
-    [SerializeField] private float increaseGravityAmount;
-    private float gravity;
     [SerializeField] private float lethalGravityValue = -25;
-    private float verticalMovement; // velocity
-    private Vector3 move;
     //private Vector3 playerPosition;
     private bool isGrounded = false;
     [Space]
@@ -46,10 +47,14 @@ public class PlayerMovement : MonoBehaviour
         strafeSpeed = initialStrafeSpeed;
         airStrafeSpeed = initialAirStrafeSpeed;
         gravity = initialGravity;
+
+        LevelGenerator1.onLevelPartSpawned += IncreaseSpeed;
         
     }
-
-
+    private void OnDestroy()
+    {
+        LevelGenerator1.onLevelPartSpawned -= IncreaseSpeed;
+    }
 
     void Update()
     {
@@ -107,13 +112,46 @@ public class PlayerMovement : MonoBehaviour
         return false;
     }
 
+    private struct SaveSpeedBeforeSlowDown
+    {
+        public float forwardSpeed, strafeSpeed, airStrafeSpeed, gravity;
+    }
+    SaveSpeedBeforeSlowDown savedSpeeds;
+    private void SlowDownSpeed()
+    {
+        savedSpeeds = new SaveSpeedBeforeSlowDown();
+        savedSpeeds.forwardSpeed = forwardSpeed;
+        savedSpeeds.strafeSpeed = strafeSpeed;
+        savedSpeeds.airStrafeSpeed = airStrafeSpeed;
+        savedSpeeds.gravity = gravity;
+
+        // TODO: Change speeds
+    }
+
+    private void BackToNormalSpeed()
+    {
+        forwardSpeed = savedSpeeds.forwardSpeed;
+        strafeSpeed = savedSpeeds.strafeSpeed;
+        airStrafeSpeed = savedSpeeds.airStrafeSpeed;
+        gravity = savedSpeeds.gravity;
+    }
 
     private void IncreaseSpeed()
     {
+        if (GameManager.Instance.SlowDownOn)
+            return;
+
+        float previousForwardSpeed = forwardSpeed;
+        forwardSpeed += increaseForwardSpeed;
+        if(forwardSpeed > maxForwardSpeed)
+        {
+            forwardSpeed = previousForwardSpeed;
+            return;
+        }
         strafeSpeed += increaseStrafeSpeed;
         airStrafeSpeed += increaseStrafeSpeed;
-        forwardSpeed += increaseForwardSpeed;
         gravity += increaseGravityAmount;
+        lethalGravityValue += increaseGravityAmount;
     }
 
     private void SetAnimatorState()

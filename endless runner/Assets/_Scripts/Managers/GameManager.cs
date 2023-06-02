@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
     public int Score { get; set; }
     public bool DoublePointsOn { get; set; } = false;
+    public bool SlowDownOn { get; set; } = false;
     private bool isPaused { get; set; } = false;
     public bool controlsEnabled { get; private set; } = true;
 
@@ -17,6 +18,9 @@ public class GameManager : MonoBehaviour
     [field: Space]
     public float gameTime { get; private set; } = 0f;
     [field: SerializeField] public float bossSpawnTime { get; private set; } = 30f;
+
+    public delegate void OnBossSpawn();
+    public static OnBossSpawn onBossSpawn;
 
     void Awake()
     {
@@ -36,7 +40,7 @@ public class GameManager : MonoBehaviour
         gameTime += Time.fixedDeltaTime;
         if (gameTime > bossSpawnTime)
         {
-
+            onBossSpawn?.Invoke();
         }
     }
 
