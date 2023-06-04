@@ -5,9 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Deadly
-  - PartStart
-  - PartEnd
-  - PlatformZThin
+  - PowerUp
   layers:
   - Default
   - TransparentFX

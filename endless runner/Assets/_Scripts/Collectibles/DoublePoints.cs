@@ -5,10 +5,6 @@ using UnityEngine;
 public class DoublePoints : PowerUp
 {
     [SerializeField] private float doublePointsDuration = 15;
-    public DoublePoints()
-    {
-        PowerUpType = PowerUpTypes.DoublePoints;
-    }
 
     public override void Collect()
     {

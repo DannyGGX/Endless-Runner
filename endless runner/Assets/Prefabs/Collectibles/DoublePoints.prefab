@@ -94,10 +94,10 @@ GameObject:
   - component: {fileID: 270201133615180677}
   - component: {fileID: 8531335995389699278}
   - component: {fileID: 711665196966110371}
-  - component: {fileID: 711665196966110370}
+  - component: {fileID: 9027578118554099950}
   m_Layer: 0
   m_Name: DoublePoints
-  m_TagString: Untagged
+  m_TagString: PowerUp
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -231,7 +231,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &711665196966110370
+--- !u!114 &9027578118554099950
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -240,14 +240,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 645178937356988735}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 740deb49b7e5fb14485ad41ca19a8ff0, type: 3}
+  m_Script: {fileID: 11500000, guid: ab94885c1d4315a49946456c547a30ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   CollectibleType: 1
   collectSound: {fileID: 0}
   collectEffect: {fileID: 1702657300312902, guid: b042dadf90fecdf409e8202c48a7f5f6, type: 3}
   PowerUpType: 0
-  doublePointsDuration: 15
 --- !u!1 &1112884155046918187
 GameObject:
   m_ObjectHideFlags: 0

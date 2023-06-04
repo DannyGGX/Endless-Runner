@@ -30,13 +30,16 @@ public class PlayerMovement : MonoBehaviour
     //private Vector3 playerPosition;
     private bool isGrounded = false;
     [Space]
+    [Header("Ground Check")]
     [SerializeField] private Transform groundCheckPositionForward;
     [SerializeField] private Transform groundCheckPositionBackward;
     [SerializeField] private LayerMask whatIsGround;
     [SerializeField] private float groundCheckDistance;
     [Space]
-    [SerializeField] private Transform leftBoundary;
-    [SerializeField] private Transform rightBoundary;
+    [Header("Slow Down Power Up")]
+    [SerializeField] private float slowDownSpeedChange = -1f;
+    [SerializeField] private float slowDownGravityChange = 2f;
+
 
     public delegate void OnPlayerFallTooFast();
     public static OnPlayerFallTooFast onPlayerFallTooFast;
@@ -49,11 +52,13 @@ public class PlayerMovement : MonoBehaviour
         gravity = initialGravity;
 
         LevelGenerator1.onLevelPartSpawned += IncreaseSpeed;
+        PlayerInteractions.onSlowDownPickUp += SlowDownSpeed;
         
     }
     private void OnDestroy()
     {
         LevelGenerator1.onLevelPartSpawned -= IncreaseSpeed;
+        PlayerInteractions.onSlowDownPickUp -= SlowDownSpeed;
     }
 
     void Update()
@@ -89,7 +94,6 @@ public class PlayerMovement : MonoBehaviour
 
         move = new Vector3(strafeMovement, verticalMovement, forwardMovement);
         characterController.Move(move * Time.deltaTime);
-        //transform.position = Mathf.Clamp()
     }
 
     //private void FixedUpdate()
@@ -116,30 +120,72 @@ public class PlayerMovement : MonoBehaviour
     {
         public float forwardSpeed, strafeSpeed, airStrafeSpeed, gravity, lethalGravityValue;
     }
-    SaveSpeedBeforeSlowDown savedSpeeds;
-    private void SlowDownSpeed(float speedChange, float gravityChange) // speedChange is nagative, gravityChange is positive
+    private SaveSpeedBeforeSlowDown savedSpeeds;
+    private void SlowDownSpeed()
     {
-        savedSpeeds = new SaveSpeedBeforeSlowDown();
-        savedSpeeds.forwardSpeed = forwardSpeed;
-        savedSpeeds.strafeSpeed = strafeSpeed;
-        savedSpeeds.airStrafeSpeed = airStrafeSpeed;
-        savedSpeeds.gravity = gravity;
-        savedSpeeds.lethalGravityValue = lethalGravityValue;
+        if (GameManager.Instance.SlowDownOn)
+            return;
 
-        forwardSpeed += speedChange;
-        strafeSpeed += speedChange;
-        airStrafeSpeed += speedChange;
-        gravity += gravityChange;
-        lethalGravityValue += gravityChange;
+        StopSlowDownTransition();
+
+        savedSpeeds = new SaveSpeedBeforeSlowDown
+        {
+            forwardSpeed = forwardSpeed,
+            strafeSpeed = strafeSpeed,
+            airStrafeSpeed = airStrafeSpeed,
+            gravity = gravity,
+            lethalGravityValue = lethalGravityValue
+        };
+
+        forwardSpeed += slowDownSpeedChange;
+        strafeSpeed += slowDownSpeedChange;
+        airStrafeSpeed += slowDownSpeedChange;
+        gravity += slowDownGravityChange;
+        lethalGravityValue += slowDownGravityChange;
     }
-
-    private void BackToNormalSpeed()
+    private void StopSlowDownTransition()
     {
+        StopCoroutine(nameof(TransitionSpeedDown));
         forwardSpeed = savedSpeeds.forwardSpeed;
         strafeSpeed = savedSpeeds.strafeSpeed;
         airStrafeSpeed = savedSpeeds.airStrafeSpeed;
         gravity = savedSpeeds.gravity;
         lethalGravityValue = savedSpeeds.lethalGravityValue;
+    }
+
+    private void BackToNormalSpeed()
+    {
+        StartCoroutine(TransitionSpeedDown(1));
+        //forwardSpeed = savedSpeeds.forwardSpeed;
+        //strafeSpeed = savedSpeeds.strafeSpeed;
+        //airStrafeSpeed = savedSpeeds.airStrafeSpeed;
+        //gravity = savedSpeeds.gravity;
+        //lethalGravityValue = savedSpeeds.lethalGravityValue;
+    }
+    IEnumerator TransitionSpeedDown(float duration)
+    {
+        float timeElapsed = 0;
+        float t;
+        float[] targetSpeeds = { savedSpeeds.forwardSpeed, savedSpeeds.strafeSpeed, savedSpeeds.airStrafeSpeed, savedSpeeds.gravity, savedSpeeds.lethalGravityValue};
+        float[] oldSpeeds = { forwardSpeed, strafeSpeed, airStrafeSpeed, gravity, lethalGravityValue};
+        while (timeElapsed < duration)
+        {
+            
+            t = timeElapsed / duration;
+
+            forwardSpeed = Mathf.Lerp(oldSpeeds[0], targetSpeeds[0], t); // might give error if oldSpeed > targetSpeed
+            strafeSpeed = Mathf.Lerp(oldSpeeds[1], targetSpeeds[1], t);
+            airStrafeSpeed = Mathf.Lerp (oldSpeeds[2], targetSpeeds[2], t);
+            gravity = Mathf.Lerp(oldSpeeds[3], targetSpeeds[3], t);
+            lethalGravityValue = Mathf.Lerp(oldSpeeds[4], targetSpeeds[4], t);
+            timeElapsed += Time.deltaTime;
+            yield return null;
+        }
+        forwardSpeed = targetSpeeds[0];
+        strafeSpeed = targetSpeeds[1];
+        airStrafeSpeed = targetSpeeds[2];
+        gravity = targetSpeeds[3];
+        lethalGravityValue = targetSpeeds[4];
     }
 
     private void IncreaseSpeed()
@@ -152,6 +198,7 @@ public class PlayerMovement : MonoBehaviour
         if(forwardSpeed > maxForwardSpeed)
         {
             forwardSpeed = previousForwardSpeed;
+            Debug.Log("Max speed reached");
             return;
         }
         strafeSpeed += increaseStrafeSpeed;
@@ -177,14 +224,5 @@ public class PlayerMovement : MonoBehaviour
 
             }
         }
-    }
-    private bool BoundaryCheck()
-    {
-        return transform.position.x <= rightBoundary.position.x && transform.position.x >= leftBoundary.position.x;
-        
-    }
-    private bool LeftBoundaryCheck()
-    {
-        return transform.position.x == rightBoundary.position.x;
     }
 }

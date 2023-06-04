@@ -7,17 +7,19 @@ public class Coin : Collectible
     public Coin()
     {
         CollectibleType = CollectibleTypes.Coin;
-
     }
+
+    [SerializeField] private int coinScoreValue = 1;
+
     public override void Collect()
     {
         if(GameManager.Instance.DoublePointsOn)
         {
-            GameManager.Instance.Score += 2;
+            GameManager.Instance.Score += coinScoreValue * 2;
         }
         else
         {
-            GameManager.Instance.Score++;
+            GameManager.Instance.Score += coinScoreValue;
         }
         base.Collect();
     }
