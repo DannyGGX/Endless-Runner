@@ -29,6 +29,9 @@ public class GameManager : MonoBehaviour
     public delegate void OnBossSpawn();
     public static OnBossSpawn onBossSpawn;
 
+    public delegate void OnShowDeathScreenCalled();
+    public static OnShowDeathScreenCalled onShowDeathScreenCalled;
+
     void Awake()
     {
         if (Instance == null)
@@ -59,7 +62,8 @@ public class GameManager : MonoBehaviour
     }
     public void ShowDeathScreen()
     {
-        StartGame();
+        onShowDeathScreenCalled?.Invoke();
+        //StartGame();
     }
 
     public void RestartGame()

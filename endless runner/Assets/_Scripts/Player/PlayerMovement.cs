@@ -32,13 +32,14 @@ public class PlayerMovement : MonoBehaviour
     [Space]
     [Header("Ground Check")]
     [SerializeField] private Transform groundCheckPositionForward;
-    [SerializeField] private Transform groundCheckPositionBackward;
+    [SerializeField] private Transform groundCheckPositionBackLeft;
+    [SerializeField] private Transform groundCheckPositionBackRight;
     [SerializeField] private LayerMask whatIsGround;
     [SerializeField] private float groundCheckDistance;
     [Space]
     [Header("Slow Down Power Up")]
-    [SerializeField] private float slowDownSpeedChange = -1f;
-    [SerializeField] private float slowDownGravityChange = 2f;
+    [SerializeField] private float slowDownSpeedChange = -1.5f;
+    [SerializeField] private float slowDownGravityChange = 2.7f;
 
 
     public delegate void OnPlayerFallTooFast();
@@ -53,12 +54,13 @@ public class PlayerMovement : MonoBehaviour
 
         LevelGenerator1.onLevelPartSpawned += IncreaseSpeed;
         PlayerInteractions.onSlowDownPickUp += SlowDownSpeed;
-        
+        HUD.onSlowDownTimerFinished += BackToNormalSpeed;
     }
     private void OnDestroy()
     {
         LevelGenerator1.onLevelPartSpawned -= IncreaseSpeed;
         PlayerInteractions.onSlowDownPickUp -= SlowDownSpeed;
+        HUD.onSlowDownTimerFinished -= BackToNormalSpeed;
     }
 
     void Update()
@@ -108,9 +110,13 @@ public class PlayerMovement : MonoBehaviour
             //Debug.DrawLine(groundCheckPositionForward.position, new Vector3(0, -groundCheckDistance), Color.yellow, 2);
             return true;
         }
-        if (Physics.Raycast(groundCheckPositionBackward.position, Vector3.down, groundCheckDistance, whatIsGround))
+        if (Physics.Raycast(groundCheckPositionBackLeft.position, Vector3.down, groundCheckDistance, whatIsGround))
         {
             //Debug.DrawLine(groundCheckPositionBackward.position, new Vector3(0, -groundCheckDistance), Color.red, 2);
+            return true;
+        }
+        if (Physics.Raycast(groundCheckPositionBackRight.position, Vector3.down, groundCheckDistance, whatIsGround))
+        {
             return true;
         }
         return false;
@@ -126,16 +132,23 @@ public class PlayerMovement : MonoBehaviour
         if (GameManager.Instance.SlowDownOn)
             return;
 
-        StopSlowDownTransition();
+        GameManager.Instance.SlowDownOn = true;
+        //StopSlowDownTransition();
 
-        savedSpeeds = new SaveSpeedBeforeSlowDown
-        {
-            forwardSpeed = forwardSpeed,
-            strafeSpeed = strafeSpeed,
-            airStrafeSpeed = airStrafeSpeed,
-            gravity = gravity,
-            lethalGravityValue = lethalGravityValue
-        };
+        //savedSpeeds = new SaveSpeedBeforeSlowDown
+        //{
+        //    forwardSpeed = forwardSpeed,
+        //    strafeSpeed = strafeSpeed,
+        //    airStrafeSpeed = airStrafeSpeed,
+        //    gravity = gravity,
+        //    lethalGravityValue = lethalGravityValue
+        //};
+        savedSpeeds = new SaveSpeedBeforeSlowDown();
+        savedSpeeds.forwardSpeed = forwardSpeed;
+        savedSpeeds.strafeSpeed = strafeSpeed;
+        savedSpeeds.airStrafeSpeed = airStrafeSpeed;
+        savedSpeeds.gravity = gravity;
+        savedSpeeds.lethalGravityValue = lethalGravityValue;
 
         forwardSpeed += slowDownSpeedChange;
         strafeSpeed += slowDownSpeedChange;
@@ -155,15 +168,16 @@ public class PlayerMovement : MonoBehaviour
 
     private void BackToNormalSpeed()
     {
-        StartCoroutine(TransitionSpeedDown(1));
-        //forwardSpeed = savedSpeeds.forwardSpeed;
-        //strafeSpeed = savedSpeeds.strafeSpeed;
-        //airStrafeSpeed = savedSpeeds.airStrafeSpeed;
-        //gravity = savedSpeeds.gravity;
-        //lethalGravityValue = savedSpeeds.lethalGravityValue;
+        //StartCoroutine(nameof(TransitionSpeedDown));
+        forwardSpeed = savedSpeeds.forwardSpeed;
+        strafeSpeed = savedSpeeds.strafeSpeed;
+        airStrafeSpeed = savedSpeeds.airStrafeSpeed;
+        lethalGravityValue = savedSpeeds.lethalGravityValue;
+        gravity = savedSpeeds.gravity;
     }
-    IEnumerator TransitionSpeedDown(float duration)
+    IEnumerator TransitionSpeedDown()
     {
+        float duration = 1;
         float timeElapsed = 0;
         float t;
         float[] targetSpeeds = { savedSpeeds.forwardSpeed, savedSpeeds.strafeSpeed, savedSpeeds.airStrafeSpeed, savedSpeeds.gravity, savedSpeeds.lethalGravityValue};

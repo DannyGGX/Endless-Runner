@@ -18,6 +18,9 @@ public class HUD : MonoBehaviour
     [SerializeField] private Slider slowDownBar;
     private float slowDownBarFill = 0;
 
+    public delegate void OnSlowDownTimerFinished();
+    public static OnSlowDownTimerFinished onSlowDownTimerFinished;
+
     private void Awake()
     {
         GameManager.onBossSpawn += HideBossCountDown;
@@ -33,11 +36,6 @@ public class HUD : MonoBehaviour
         GameManager.onBossSpawn -= HideBossCountDown;
         PlayerInteractions.onDoublePointsPickUp -= DoublePointsActivation;
         PlayerInteractions.onSlowDownPickUp -= SlowDownActivation;
-    }
-
-    void Update()
-    {
-        
     }
 
     private void FixedUpdate()
@@ -59,10 +57,13 @@ public class HUD : MonoBehaviour
         doublePointsBar.maxValue = GameManager.Instance.DoublePointsTime;
         doublePointsBar.minValue = 0;
         doublePointsBar.value = GameManager.Instance.DoublePointsTime;
-        StartCoroutine(DepleteDoublePointsBar(0, GameManager.Instance.DoublePointsTime, GameManager.Instance.DoublePointsTime));
+        StartCoroutine(nameof(DepleteDoublePointsBar));
     }
-    IEnumerator DepleteDoublePointsBar(float minValue, float maxValue, float duration)
+    IEnumerator DepleteDoublePointsBar()
     {
+        float minValue = 0;
+        float maxValue = GameManager.Instance.DoublePointsTime;
+        float duration = GameManager.Instance.DoublePointsTime;
         float timeElapsed = duration;
 
         while(timeElapsed > 0)
@@ -80,15 +81,17 @@ public class HUD : MonoBehaviour
     private void SlowDownActivation()
     {
         StopCoroutine(nameof(DepleteSlowDownBar));
-        GameManager.Instance.SlowDownOn = true;
+        //GameManager.Instance.SlowDownOn = true; // this has to be done in slow down method in PlayerMovement
         slowDownUI.SetActive(true);
         slowDownBar.maxValue = GameManager.Instance.SlowDownTime;
         slowDownBar.minValue = 0;
         slowDownBar.value = GameManager.Instance.SlowDownTime;
-        StartCoroutine(DepleteSlowDownBar(0, GameManager.Instance.SlowDownTime));
+        StartCoroutine(nameof(DepleteSlowDownBar));
     }
-    IEnumerator DepleteSlowDownBar(float minValue, float maxValue)
+    IEnumerator DepleteSlowDownBar()
     {
+        float minValue = 0;
+        float maxValue = GameManager.Instance.SlowDownTime;
         float duration = maxValue;
         float timeElapsed = duration;
         while (timeElapsed > 0)
@@ -101,6 +104,7 @@ public class HUD : MonoBehaviour
         slowDownBarFill = minValue;
         GameManager.Instance.SlowDownOn = false;
         slowDownUI.SetActive(false);
+        onSlowDownTimerFinished?.Invoke();
     }
 
 
